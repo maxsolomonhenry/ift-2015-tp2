@@ -19,7 +19,7 @@ Hierarchy is as follows:
     - name (String, comparable), inventory (MinHeap<InventoryItem>)
 - `InventoryItem`
     - date (Date, comparable), quantity (Integer)
-- `Date`
+- `CustomDate`
     - validation logic (doesn't validate leap years, num days in certain months, etc.)
     - comparable implementation
 - ?`Prescription` (for requests)
@@ -44,6 +44,6 @@ Hierarchy is as follows:
 
 ### Vlad
 - [x] Date class with validity checking and order (preimplemented?)
-    - `Date(year (int), month (int), day (int))`
+    - `CustomDate(year (int), month (int), day (int))`
     - `validate()` (called in the constructor): makes sure that the date is a real one (e.g., no Feb 29 _unless it's a leap year_).
     - `comparable()`: returns -1 if thisdate is earlier than thatdate...
