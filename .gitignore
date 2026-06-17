@@ -1,0 +1,6 @@
+reference/
+data/
+.DS_Store
+*.javac
+*.class
+*.zip
