@@ -43,7 +43,7 @@ Hierarchy is as follows:
 - [ ] Implement classes to support reading input (Prescirption etc.)
 
 ### Vlad
-- [ ] Date class with validity checking and order (preimplemented?)
+- [x] Date class with validity checking and order (preimplemented?)
     - `Date(year (int), month (int), day (int))`
     - `validate()` (called in the constructor): makes sure that the date is a real one (e.g., no Feb 29 _unless it's a leap year_).
     - `comparable()`: returns -1 if thisdate is earlier than thatdate...
