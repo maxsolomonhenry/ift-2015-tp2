@@ -31,3 +31,19 @@ Hierarchy is as follows:
     - num cycles
 - `ProcessingQueue` (Queue<Prescription>)
     - for FIFO handling of prescriptions.
+
+## TODO
+- [ ] Make InventoryItem class
+- [ ] Make MedicationItem class
+- [ ] Make stock tree
+- [ ] Logic to write output
+
+### Max
+- [ ] Read file input logic
+- [ ] Implement classes to support reading input (Prescirption etc.)
+
+### Vlad
+- [ ] Date class with validity checking and order (preimplemented?)
+    - `Date(year (int), month (int), day (int))`
+    - `validate()` (called in the constructor): makes sure that the date is a real one (e.g., no Feb 29 _unless it's a leap year_).
+    - `comparable()`: returns -1 if thisdate is earlier than thatdate...
