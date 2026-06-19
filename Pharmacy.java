@@ -70,7 +70,7 @@ public class Pharmacy {
 
     public String executePrescription(InputIterator iter) {
 
-        StringerBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
         while (!iter.next().contains(";")) {
             buffer = iter.peek();
@@ -81,8 +81,9 @@ public class Pharmacy {
             // and return a status message.
             // Make expiry date calculation as well.
         }
-        String result = "Done PRESCRIPTION\n";
-        return result;
+
+        result.append("Done PRESCRIPTION\n");
+        return result.toString();
     }
 
     public String executeDate(InputIterator iter) {
