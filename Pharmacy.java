@@ -69,10 +69,17 @@ public class Pharmacy {
     }
 
     public String executePrescription(InputIterator iter) {
+
+        StringerBuilder result = new StringBuilder();
+
         while (!iter.next().contains(";")) {
             buffer = iter.peek();
 
             PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
+
+            // Check if there is enough left (including other backordered items)
+            // and return a status message.
+            // Make expiry date calculation as well.
         }
         String result = "Done PRESCRIPTION\n";
         return result;
