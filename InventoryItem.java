@@ -1,15 +1,15 @@
 // a class to contain a record of cetain medication - expiry date and quantity
-public class InventoryRecord implements Comparable<InventoryRecord> {
+public class InventoryItem implements Comparable<InventoryItem> {
     
     // expiration date for this medication record (encapsulated)
-    private CustomDate expiryDate;
+    private PharmacyDate expiryDate;
 
     // quantity of medication for this record (encapsualted) 
     private int quantity;
 
     // comparator
     @Override
-    public int compareTo(InventoryRecord other){
+    public int compareTo(InventoryItem other){
         return expiryDate.compareTo(other.expiryDate);
     }
 

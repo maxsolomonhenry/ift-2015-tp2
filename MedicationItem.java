@@ -6,12 +6,12 @@ public class MedicationItem implements Comparable<MedicationItem>{
     private final String name;
 
     // heap to store medication inventory record (encapsulated)
-    private PriorityQueue<InventoryRecord> inventory;
+    private PriorityQueue<InventoryItem> inventory;
 
     // constructor
     public MedicationItem(String name){
         this.name = name;
-        this.inventory = new PriorityQueue<InventoryRecord>();
+        this.inventory = new PriorityQueue<InventoryItem>();
     }
 
     // get name
@@ -26,7 +26,7 @@ public class MedicationItem implements Comparable<MedicationItem>{
     }
 
     // add new inventory record about this medication
-    public void addRecord(InventoryRecord newRecord){
+    public void addRecord(InventoryItem newRecord){
         inventory.add(newRecord);
     }
 

@@ -9,22 +9,22 @@ Hierarchy is as follows:
 - `stockTree (TreeSet<MedicationItem>)`
 - `MedicationItem`:
     - `name (String)`: Medication name (comparable)
-    - `inventory (PriorityQueue<InventoryRecord>)`
-- `InventoryRecord`:
-   - `expiryDate (CustomDate)`: CustomDate class (comparable)
+    - `inventory (PriorityQueue<InventoryItem>)`
+- `InventoryItem`:
+   - `expiryDate (Date)`: Date class (comparable)
    - `quantity (Integer)`: amount available
 
 ### Classes
 - `MedicationItem`
-    - name (String, comparable), inventory (MinHeap<InventoryRecord>)
+    - name (String, comparable), inventory (MinHeap<InventoryItem>)
     - compareTo on name
     - getName to get name of the medication
-    - addrecord to add new InventoryRecord instace to inventory heap
-- `InventoryRecord`
+    - addrecord to add new InventoryItem instace to inventory heap
+- `InventoryItem`
     - expiryDate (Date, comparable), quantity (Integer)
     - compareTo on expiryDate
     - setQuanity on quanity to overwrite quantity
-- `CustomDate`
+- `Date`
     - validation logic (doesn't validate leap years, num days in certain months, etc.)
     - comparable implementation
 - ?`Prescription` (for requests)
@@ -41,22 +41,22 @@ Hierarchy is as follows:
 - [ ] Logic to write output
 
 ### Max
-- [ ] Read file input logic
+- [x] Read file input logic
 - [ ] Implement classes to support reading input (Prescirption etc.)
 
 ### Vlad
 - [x] Date class with validity checking and order (preimplemented?)
-    - `CustomDate(year (int), month (int), day (int))`
+    - `Date(year (int), month (int), day (int))`
     - `validate()` (called in the constructor): makes sure that the date is a real one (e.g., no Feb 29 _unless it's a leap year_).
     - `comparable()`: returns -1 if thisdate is earlier than thatdate...
 
 - [ ] Make MedicationItem class to store name of medication and its inventory record with exp date and qt
-    - `MedicationItem(String name, PriorityQueue<InventoryRecord> inventory)`
+    - `MedicationItem(String name, PriorityQueue<InventoryItem> inventory)`
     - `compareTo()` returns -1 if this.name is earlier than other.name
-    - `addRecord(InventoryRecord newRecord)` add newRecord to the priority queue
+    - `addRecord(InventoryItem newRecord)` add newRecord to the priority queue
 
 - [ ] Make InventoryItem class
-    - `InventoryItem(CustomDate expiryDate, int quantity)`
+    - `InventoryItem(Date expiryDate, int quantity)`
     - `compareTo()` returns -1 if this.expiryDate is sooner than other.expiryDate
     - `setQuantity(int newQuantity)` set updated quanity for this record
 - [x] Make stock tree

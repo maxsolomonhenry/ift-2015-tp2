@@ -2,22 +2,27 @@ import java.time.LocalDate;
 import java.time.DateTimeException;
 
 // a custom class wrapping existing class java.time.LocalDate
-public class CustomDate implements Comparable<CustomDate>{
+public class PharmacyDate implements Comparable<PharmacyDate>{
 
     // encapsulate date 
     private final LocalDate date;
 
     // constructor from year, month, day
-    public CustomDate(int year, int month, int day){
+    public PharmacyDate() {
+        this(1900, 1, 1);
+    }
+
+    public PharmacyDate(int year, int month, int day){
         try{
             this.date = LocalDate.of(year, month, day);
-        
         }
 
         // reporting error if date is invalid
         catch (DateTimeException e){
             throw new IllegalArgumentException(
-                "date " + year + "-" + month + "-" + day + "is invalid"
+                String.format("Date %4d-%2d-%2d is invalid", 
+                    year, month, day
+                )
             );
         }  
     }
@@ -30,7 +35,7 @@ public class CustomDate implements Comparable<CustomDate>{
 
     // comparator
     @Override
-    public int compareTo(CustomDate other){
+    public int compareTo(PharmacyDate other){
         return this.date.compareTo(other.date);
     }
 
