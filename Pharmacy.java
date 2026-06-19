@@ -69,8 +69,10 @@ public class Pharmacy {
     }
 
     public String executePrescription(InputIterator iter) {
-        while (!iter.peek().contains(";")) {
-            iter.next();
+        while (!iter.next().contains(";")) {
+            buffer = iter.peek();
+
+            PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
         }
         String result = "Done PRESCRIPTION\n";
         return result;

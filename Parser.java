@@ -15,10 +15,23 @@ public class Parser {
 
     public static ApprovItem parseApprovItem(String buffer) {
         String[] parts = buffer.split(" +");
+
+        // Vars here named for clarity (n.b. less efficient).
         String name = parts[0];
         int quantity = Integer.parseInt(parts[1]);
         PharmacyDate date = parseDate(parts[2]);
 
         return new ApprovItem(name, quantity, date);
+    }
+
+    public static PrescriptionItem parsePrescriptionItem(String buffer) {
+        String[] parts = buffer.split(" +");
+
+        // Vars here named for clarity (n.b. less efficient).
+        String medication = parts[0];
+        int numPerDose = Integer.parseInt(parts[1]);
+        int numRepeats = Integer.parseInt(parts[2]);
+
+        return new PrescriptionItem(medication, numPerDose, numRepeats);
     }
 }

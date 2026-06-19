@@ -38,15 +38,17 @@ Hierarchy is as follows:
     - for FIFO handling of prescriptions.
 
 ## TODO
-- [ ] Logic to write output
-
-### Max
-- [x] Read file input logic
-- [ ] Implement classes to support reading input (Prescirption etc.)
+- [ ] Double check that lines with ";" in them don't get ignored.
 - [ ] DATE
 - [ ] PRESCRIPTION
-- [ ] APPROV
-- [ ] STOCK
+
+
+### Max
+- [x] Logic to write output
+- [x] Read file input logic
+- [x] Implement classes to support reading input (Prescirption etc.)
+- [x] APPROV
+- [x] STOCK
 
 ### Vlad
 - [x] Date class with validity checking and order (preimplemented?)
