@@ -1,8 +1,6 @@
 public class Parser {
-    public static PharmacyDate parseDate(String line) {
-        String[] parts = line.split(" +");
-        String[] ymd = parts[1].split("-");
-
+    public static PharmacyDate parseDate(String buffer) {
+        String[] ymd = buffer.split("-");
         return new PharmacyDate(
                 Integer.parseInt(ymd[0]),
                 Integer.parseInt(ymd[1]),
@@ -10,8 +8,17 @@ public class Parser {
         );
     }
 
-    public static State parseCommand(String line) {
-        String[] parts = line.split(" +");
+    public static State parseCommand(String buffer) {
+        String[] parts = buffer.split(" +");
         return State.from(parts[0]);
+    }
+
+    public static ApprovItem parseApprovItem(String buffer) {
+        String[] parts = buffer.split(" +");
+        String name = parts[0];
+        int quantity = Integer.parseInt(parts[1]);
+        PharmacyDate date = parseDate(parts[2]);
+
+        return new ApprovItem(name, quantity, date);
     }
 }

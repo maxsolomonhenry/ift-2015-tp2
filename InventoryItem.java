@@ -7,6 +7,11 @@ public class InventoryItem implements Comparable<InventoryItem> {
     // quantity of medication for this record (encapsualted) 
     private int quantity;
 
+    public InventoryItem(PharmacyDate expiryDate, int quantity) {
+        this.expiryDate = expiryDate;
+        this.quantity = quantity;
+    }
+
     // comparator
     @Override
     public int compareTo(InventoryItem other){

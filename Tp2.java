@@ -50,8 +50,7 @@ public class Tp2 {
                 case APPROV -> result = pharmacy.executeApprov(iter);
                 case STOCK -> result = pharmacy.executeStock(iter);
                 case PRESCRIPTION -> result = pharmacy.executePrescription(iter);
-                case DATE -> result = pharmacy.executeDate(
-                    Parser.parseDate(iter.peek()));
+                case DATE -> result = pharmacy.executeDate(iter);
                 case END -> { }
 
             }
