@@ -1,6 +1,7 @@
 public class Parser {
     public static PharmacyDate parseDate(String buffer) {
         String[] ymd = buffer.split("-");
+
         return new PharmacyDate(
                 Integer.parseInt(ymd[0]),
                 Integer.parseInt(ymd[1]),

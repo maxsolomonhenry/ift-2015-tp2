@@ -37,6 +37,7 @@ public class Tp2 {
         String result = "";
         StringBuilder results = new StringBuilder();
 
+        // State machine directs the engine.
         while (state != State.END) {
             switch (state) {
                 case ACCEPT_COMMAND -> {
