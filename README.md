@@ -43,6 +43,10 @@ Hierarchy is as follows:
 ### Max
 - [x] Read file input logic
 - [ ] Implement classes to support reading input (Prescirption etc.)
+- [ ] DATE
+- [ ] PRESCRIPTION
+- [ ] APPROV
+- [ ] STOCK
 
 ### Vlad
 - [x] Date class with validity checking and order (preimplemented?)

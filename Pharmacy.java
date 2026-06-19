@@ -11,12 +11,30 @@ public class Pharmacy {
     public Pharmacy() {
     }
 
-    public String executePrescription(InputIterator iter) {
+    public String executeApprov(InputIterator iter) {
+        // TODO
         while (!iter.peek().contains(";")) {
             iter.next();
         }
+        String result = "Done APPROV";
+        return result;
+    }
 
-        String result = "Done Prescription";
+    public String executeStock(InputIterator iter) {
+        // TODO
+        while (!iter.peek().contains(";")) {
+            iter.next();
+        }
+        String result = "Done STOCK";
+        return result;
+    }
+
+    public String executePrescription(InputIterator iter) {
+        // TODO
+        while (!iter.peek().contains(";")) {
+            iter.next();
+        }
+        String result = "Done PRESCRIPTION";
         return result;
     }
 
@@ -26,6 +44,7 @@ public class Pharmacy {
     }
 
     private String buildDateMessage() {
+        // TODO
         StringBuilder result = new StringBuilder();
         result.append(String.format(
                 "%s OK",

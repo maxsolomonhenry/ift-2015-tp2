@@ -33,38 +33,32 @@ public class Tp2 {
             System.out.println("\nBEGIN OUTPUT");
         }
 
-        String currentLine = "";
+        String lastResult = "";
         while (state != State.END) {
             switch (state) {
                 case ACCEPT_COMMAND -> {
+
                     if (!iter.hasNext()) {
                         state = State.END;
                         continue;
                     }
                     state = Parser.parseCommand(iter.next());
+                    continue;
                 }
-                case DATE -> {
-                    String result = pharmacy.executeDate(Parser.parseDate(iter.peek()));
-
-                    if (DEBUG) {
-                        System.out.println(result);
-                    }
-
-                    state = State.ACCEPT_COMMAND;
-                }
-                case PRESCRIPTION, APPROV, STOCK -> {
-                    String result = pharmacy.executePrescription(iter);
-                    if (DEBUG) {
-                        System.out.println(result);
-                    }
-                    state = State.ACCEPT_COMMAND;
-                }
-                // case APPROV -> {
-                // }
-                // case STOCK -> {
-                // }
+                case APPROV -> lastResult = pharmacy.executeApprov(iter);
+                case STOCK -> lastResult = pharmacy.executeStock(iter);
+                case PRESCRIPTION -> lastResult = pharmacy.executePrescription(iter);
+                case DATE -> lastResult = pharmacy.executeDate(
+                    Parser.parseDate(iter.peek())
+                );
                 case END -> { }
+
             }
+
+            if (DEBUG) {
+                System.out.println(lastResult);
+            }
+            state = State.ACCEPT_COMMAND;
         }
     }
 }
