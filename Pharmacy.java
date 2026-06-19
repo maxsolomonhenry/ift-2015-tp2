@@ -16,7 +16,7 @@ public class Pharmacy {
         while (!iter.peek().contains(";")) {
             iter.next();
         }
-        String result = "Done APPROV";
+        String result = "Done APPROV\n";
         return result;
     }
 
@@ -25,7 +25,7 @@ public class Pharmacy {
         while (!iter.peek().contains(";")) {
             iter.next();
         }
-        String result = "Done STOCK";
+        String result = "Done STOCK\n";
         return result;
     }
 
@@ -34,7 +34,7 @@ public class Pharmacy {
         while (!iter.peek().contains(";")) {
             iter.next();
         }
-        String result = "Done PRESCRIPTION";
+        String result = "Done PRESCRIPTION\n";
         return result;
     }
 
@@ -47,7 +47,7 @@ public class Pharmacy {
         // TODO
         StringBuilder result = new StringBuilder();
         result.append(String.format(
-                "%s OK",
+                "%s OK\n",
                 currentDate));
 
         return result.toString();

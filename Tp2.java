@@ -2,9 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.TreeSet;
 import java.util.List;
-import java.util.Iterator;
 
 public class Tp2 {
 
@@ -15,9 +13,11 @@ public class Tp2 {
         Path inputPath = Paths.get(args[0]);
         Path outputPath = Paths.get(args[1]);
 
+        // Engine.
         Pharmacy pharmacy = new Pharmacy();
-
         State state = State.ACCEPT_COMMAND;
+
+        // For parsing the input.
         List<String> lines = Files.readAllLines(inputPath);
         InputIterator iter = new InputIterator(lines.iterator());
 
@@ -33,11 +33,13 @@ public class Tp2 {
             System.out.println("\nBEGIN OUTPUT");
         }
 
-        String lastResult = "";
+        // For storing output.
+        String result = "";
+        StringBuilder results = new StringBuilder();
+
         while (state != State.END) {
             switch (state) {
                 case ACCEPT_COMMAND -> {
-
                     if (!iter.hasNext()) {
                         state = State.END;
                         continue;
@@ -45,20 +47,24 @@ public class Tp2 {
                     state = Parser.parseCommand(iter.next());
                     continue;
                 }
-                case APPROV -> lastResult = pharmacy.executeApprov(iter);
-                case STOCK -> lastResult = pharmacy.executeStock(iter);
-                case PRESCRIPTION -> lastResult = pharmacy.executePrescription(iter);
-                case DATE -> lastResult = pharmacy.executeDate(
-                    Parser.parseDate(iter.peek())
-                );
+                case APPROV -> result = pharmacy.executeApprov(iter);
+                case STOCK -> result = pharmacy.executeStock(iter);
+                case PRESCRIPTION -> result = pharmacy.executePrescription(iter);
+                case DATE -> result = pharmacy.executeDate(
+                    Parser.parseDate(iter.peek()));
                 case END -> { }
 
             }
 
             if (DEBUG) {
-                System.out.println(lastResult);
+                System.out.print(result);
             }
+
+            results.append(result);
             state = State.ACCEPT_COMMAND;
         }
+
+        // Write to output.
+        Files.writeString(outputPath, results);
     }
 }
