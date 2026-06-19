@@ -5,7 +5,7 @@ public class Pharmacy {
     private static final PharmacyDate MIN_DATE = new PharmacyDate(2000, 1, 1);
     private static final PharmacyDate MAX_DATE = new PharmacyDate(2027, 1, 1);
 
-    TreeMap<String, TreeMap<PharmacyDate, Integer>> stock = new TreeMap<>();
+    TreeMap<String, TreeMap<PharmacyDate, InventoryItem>> stock = new TreeMap<>();
     PharmacyDate currentDate = new PharmacyDate();
     String buffer = new String();
 
@@ -19,19 +19,21 @@ public class Pharmacy {
 
             // Check if this medication is there. If not, make an entry.
             if (!stock.containsKey(item.name)){
-                stock.put(item.name, new TreeMap<PharmacyDate, Integer>());
+                stock.put(item.name, new TreeMap<PharmacyDate, InventoryItem>());
             }
 
-            TreeMap<PharmacyDate, Integer> medStore = stock.get(item.name);
+            TreeMap<PharmacyDate, InventoryItem> medStore = stock.get(item.name);
 
             // Look for entries of this expiry date and add if not there.
             if (!medStore.containsKey(item.expiry)) {
-                medStore.put(item.expiry, 0);
+                medStore.put(item.expiry, new InventoryItem(0, 0));
             }
 
             // Add to supply.
-            int prev = medStore.get(item.expiry);
-            medStore.put(item.expiry, prev + item.quantity);
+            InventoryItem current = medStore.get(item.expiry);
+            current.numAvailable += item.quantity;
+
+            medStore.put(item.expiry, current);
         }
         return "APPROV OK\n";
     }
@@ -53,15 +55,15 @@ public class Pharmacy {
         // Iterate through medications by name in order.
         // For each medication, list quantity and expiry date.
         stock.forEach((medication, store) -> {
-            store.forEach((date, quantity) -> {
+            store.forEach((date, item) -> {
 
                 // Skip expired drugs or empty entries.
-                if (quantity == 0 || date.compareTo(currentDate) < 0) {
+                if (item.numAvailable == 0 || date.compareTo(currentDate) < 0) {
                     return;
                 }
 
                 result.append(String.format("%s %d %s\n", 
-                    medication, quantity, date));
+                    medication, item.numAvailable, date));
             });
         });
 
@@ -78,6 +80,7 @@ public class Pharmacy {
             PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
 
             // Check if there is enough left (including other backordered items)
+            // I.e., add to numRequested.
             // and return a status message.
             // Make expiry date calculation as well.
         }
