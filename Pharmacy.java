@@ -1,4 +1,7 @@
 import java.util.TreeMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NavigableMap;
 
 public class Pharmacy {
 
@@ -79,6 +82,7 @@ public class Pharmacy {
         return result.append("\n").toString();
     }
 
+
     public String executePrescription(InputIterator iter) {
 
         // create result string builder to store outputs
@@ -92,11 +96,14 @@ public class Pharmacy {
             // create a Prescription item instance from the input line
             PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
 
-            // get the required endDate for the dose cycles of the prescription item
-            PharmacyDate endDate = item.getEndDate();
+            // get the needed number of medications to provide for the prescription
+            int numNeed = item.getNeedNumber();
 
-            // status message to report
-            String status = "COMMANDE";
+            // get the minimum needed expiration date expNeed for medications for the prescription 
+            PharmacyDate expNeed = item.getNeedExpDate();
+
+            // status message to report. Default status = OK.
+            String status = "OK";
 
             // get stock tree for this medication
             TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(item.medication);
@@ -107,21 +114,44 @@ public class Pharmacy {
                 stock.put(item.medication, medicationStock);
             }
 
-            // for this medication stock we get inventory item for this expiry (end date)
-            InventoryItem inventoryItem = medicationStock.get(endDate);
+            // for this medication stock we get inventory item for the required end date
+            InventoryItem inventoryItem = medicationStock.get(expNeed);
 
             // if medication with the required end date does not exist, create it and add to stock
             if (inventoryItem == null){
                 inventoryItem = new InventoryItem(0, 0);
-                medicationStock.put(endDate, inventoryItem);
+                medicationStock.put(expNeed, inventoryItem);
             }
 
-            // updated numRequested
-            inventoryItem.numRequested += item.numTotal;
+            // create a navigable tail tree medicationStockTail from medicationStock
+            // this tree has elements with keys bigger or equal to expNeed
+            // true indicates that we include the node with key = expNeed
+            NavigableMap<PharmacyDate, InventoryItem> medicationStockTail = 
+                medicationStock.tailMap(expNeed, true);
 
-            // if there is enough left then status = OK else leave status = COMMANCE
-            if ((inventoryItem.numAvailable - inventoryItem.numRequested) >= item.numTotal)
-                status = "OK";
+            // create an iterator to efficiently iterate over values of medicationStockTail
+            // values are InventoryItem instances
+            Iterator<InventoryItem> iterator =
+                medicationStockTail.values().iterator();
+
+            // we iteratively update numRequest and numNeed for each inventory item in medicationStockTail
+            // while either we have inventory items in medication stock
+            // or we have not satisfied the numNeed
+            while (iterator.hasNext() && numNeed>0){
+                inventoryItem = iterator.next();
+                inventoryItem.numRequested += inventoryItem.numAvailable;
+                numNeed -= inventoryItem.numAvailable;
+            }
+
+            // if we could not satisfy the needed number of medications
+            // we need need to order the rest
+            // we updated numRequested at inventoryItem with the target expDate
+            // we set status = COMMANDE
+            if (numNeed > 0){
+                inventoryItem = medicationStock.get(expNeed);
+                inventoryItem.numRequested = numNeed;
+                status = "COMMANDE";
+            }
 
             // return a status message.
             result.append(String.format("%s %d %d %s\n", item.medication, item.numPerDose, item.numRepeats, status));
@@ -133,6 +163,7 @@ public class Pharmacy {
 
         return result.append("\n").toString();
     }
+
 
     public String executeDate(InputIterator iter) {
         // Strip "DATE" text.
@@ -151,7 +182,7 @@ public class Pharmacy {
             )
         );
 
-        // iterate through medications
+        // iterate through all medications
         for (String medicationName : stock.keySet()) {
 
             TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(medicationName);
