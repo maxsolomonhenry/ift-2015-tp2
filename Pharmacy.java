@@ -167,7 +167,7 @@ public class Pharmacy {
             // we set status = COMMANDE
             if (numNeed > 0){
                 inventoryItem = medicationStock.get(expNeed);
-                inventoryItem.numRequested = numNeed;
+                inventoryItem.numRequested += numNeed;
                 status = "COMMANDE";
             }
 
