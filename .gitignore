@@ -4,3 +4,8 @@ data/
 *.javac
 *.class
 *.txt
+
+# exlude data for testing
+!data/
+!data/exemple7.txt
+!data/exemple7+.txt
