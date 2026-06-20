@@ -20,8 +20,4 @@ public class PrescriptionItem {
     public PharmacyDate getNeedExpDate(){        
         return Pharmacy.currentDate.plusDays(this.numPerDose * this.numRepeats);
     }
-
-
-
-
 }
