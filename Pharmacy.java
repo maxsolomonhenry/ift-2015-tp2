@@ -1,4 +1,7 @@
 import java.util.TreeMap;
+
+import javax.print.DocFlavor.STRING;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -13,6 +16,9 @@ public class Pharmacy {
 
     // create a variable to store information about the whole medication stock 
     TreeMap<String, TreeMap<PharmacyDate, InventoryItem>> stock = new TreeMap<>();
+ 
+    // STATIC (GLOBAL) CLASS VARIABLE COUTING THE NUMBER OF PRESCCRIPTIONS
+    static int prescriptionCount = 0; 
     
     String buffer = new String();
 
@@ -65,12 +71,11 @@ public class Pharmacy {
             store.forEach((date, item) -> {
 
                 // Skip expired drugs or empty entries.
-                if (item.numAvailable == 0 || date.compareTo(currentDate) < 0) {
-                    return;
+                if (item.numAvailable != 0 && item.numAvailable > item.numRequested != date.compareTo(currentDate) < 0){
+                    result.append(String.format("%s %d %s\n", 
+                        medication, item.numAvailable - item.numRequested, date));
                 }
 
-                result.append(String.format("%s %d %s\n", 
-                    medication, item.numAvailable, date));
             });
         });
 
@@ -85,9 +90,12 @@ public class Pharmacy {
 
     public String executePrescription(InputIterator iter) {
 
+        // augment the number of prescriptions
+        prescriptionCount += 1;
+
         // create result string builder to store outputs
         StringBuilder result = new StringBuilder();
-        result.append("PRESCRIPTION\n");
+        result.append(String.format("PRESCRIPTION %d\n", prescriptionCount));
 
         // loop while presription has medications
         while (!iter.next().contains(";")) {
@@ -134,13 +142,23 @@ public class Pharmacy {
             Iterator<InventoryItem> iterator =
                 medicationStockTail.values().iterator();
 
-            // we iteratively update numRequest and numNeed for each inventory item in medicationStockTail
+            // we iteratively update numRequested and numNeed for each inventory item in medicationStockTail
             // while either we have inventory items in medication stock
             // or we have not satisfied the numNeed
             while (iterator.hasNext() && numNeed>0){
                 inventoryItem = iterator.next();
-                inventoryItem.numRequested += inventoryItem.numAvailable;
-                numNeed -= inventoryItem.numAvailable;
+                int delta = inventoryItem.numAvailable - inventoryItem.numRequested;
+                if (delta > 0){
+                    if (delta >= numNeed){
+                        inventoryItem.numRequested += numNeed;
+                        numNeed = 0;
+                    }
+                    else{
+                        numNeed -= delta;
+                        inventoryItem.numRequested = inventoryItem.numAvailable; 
+                    }
+
+                }
             }
 
             // if we could not satisfy the needed number of medications
@@ -177,7 +195,7 @@ public class Pharmacy {
         StringBuilder result = new StringBuilder();
         result.append(
             String.format(
-                "%s COMMANDE\n",
+                "%s COMMANDES :\n",
                 currentDate
             )
         );
@@ -187,7 +205,10 @@ public class Pharmacy {
 
             TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(medicationName);
 
-            // iteratate through all medication stock
+            // the total number of requested type of medication regardless the expiryDate
+            int totalNumRequested = 0;
+
+            // iteratate through all medication stock to update records
             for (PharmacyDate expiryDate : medicationStock.keySet()){
 
                 InventoryItem inventoryItem = medicationStock.get(expiryDate);
@@ -195,27 +216,41 @@ public class Pharmacy {
                 // if a medication has expeired, remove it
                 if (expiryDate.compareTo(currentDate) < 0){
                     inventoryItem.numAvailable = 0;
-                }
-
-                // find ordered drugs
-                if (inventoryItem.numAvailable < inventoryItem.numRequested){
-
-                    // list ordered drugs
-                    result.append(
-                        String.format(
-                            "%s %d \n",
-                            medicationName,
-                            inventoryItem.numRequested - inventoryItem.numAvailable
-                        )
-                    );
-
-                    // remove drugs from odered list
                     inventoryItem.numRequested = 0;
-
-                    // change flag
-                    emptyOrderList = false;
                 }
 
+
+                // when there is more items left than ordered
+                // we updated numAvailable and reset numRequested 
+                if (inventoryItem.numAvailable >= inventoryItem.numRequested){
+                    inventoryItem.numAvailable -= inventoryItem.numRequested;
+                    inventoryItem.numRequested = 0;
+                }
+
+                // when there are not enough available items
+                // then we update totalNumRequested
+                // we reset numAvailable
+                // we reset numRequested (remove drugs from oder list)
+                else{
+                    totalNumRequested += inventoryItem.numRequested - inventoryItem.numAvailable; 
+                    inventoryItem.numRequested = 0;
+                    inventoryItem.numAvailable = 0;
+                }
+
+            }
+
+            // if totalNumRequested is not empty then add it to the result
+            if (totalNumRequested > 0) {
+                result.append(
+                    String.format(
+                        "%s %d\n",
+                        medicationName,
+                        totalNumRequested
+                    )
+                );
+
+            // change flag
+            emptyOrderList = false;
             }
 
         }
