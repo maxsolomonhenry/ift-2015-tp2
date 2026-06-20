@@ -10,12 +10,12 @@ public class Parser {
     }
 
     public static State parseCommand(String buffer) {
-        String[] parts = buffer.split(" +");
+        String[] parts = buffer.trim().split("\\s+");
         return State.from(parts[0]);
     }
 
     public static ApprovItem parseApprovItem(String buffer) {
-        String[] parts = buffer.split(" +");
+        String[] parts = buffer.trim().split("\\s+");
 
         // Vars here named for clarity (n.b. less efficient).
         String name = parts[0];
@@ -26,7 +26,7 @@ public class Parser {
     }
 
     public static PrescriptionItem parsePrescriptionItem(String buffer) {
-        String[] parts = buffer.split(" +");
+        String[] parts = buffer.trim().split("\\s+");
 
         // Vars here named for clarity (n.b. less efficient).
         String medication = parts[0];
