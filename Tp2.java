@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Tp2 {
 
-    private static boolean DEBUG = true;
+    // GLOBAL CONSTANT FOR DEBUGGING, ACCESSIBLE AND CHANGABLE FROM EVERYWHERE
+    static final boolean DEBUG = true;
 
     public static void main(String [] args) throws IOException {
 
