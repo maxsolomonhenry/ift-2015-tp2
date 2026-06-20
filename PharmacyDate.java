@@ -5,13 +5,14 @@ import java.time.DateTimeException;
 public class PharmacyDate implements Comparable<PharmacyDate>{
 
     // encapsulate date 
-    private final LocalDate date;
+    private LocalDate date;
 
-    // constructor from year, month, day
+    // default constructor
     public PharmacyDate() {
         this(1900, 1, 1);
     }
 
+    // constructor from year, month, day
     public PharmacyDate(int year, int month, int day){
         try{
             this.date = LocalDate.of(year, month, day);
@@ -27,11 +28,21 @@ public class PharmacyDate implements Comparable<PharmacyDate>{
         }  
     }
 
+    // constructor from LocalDate
+    public PharmacyDate(LocalDate date){
+        this.date = date;
+    }
+
+
     // getting date instance variable
     public LocalDate getDate(){
         return date;
     }
-    
+
+    // plus X days to PharmacyDate and return (create) new one
+    public PharmacyDate plusDays(int days){
+        return new PharmacyDate(date.plusDays(days));
+    }
 
     // comparator
     @Override

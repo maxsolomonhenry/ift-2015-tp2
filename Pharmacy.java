@@ -4,9 +4,13 @@ public class Pharmacy {
 
     private static final PharmacyDate MIN_DATE = new PharmacyDate(2000, 1, 1);
     private static final PharmacyDate MAX_DATE = new PharmacyDate(2027, 1, 1);
+    
+    // CREATE CLASS VARIABLE FOR CURRENT DATE TO ACCESS AND CHANGE GLOBALY
+    static PharmacyDate currentDate = new PharmacyDate();
 
+    // create a variable to store information about the whole medication stock 
     TreeMap<String, TreeMap<PharmacyDate, InventoryItem>> stock = new TreeMap<>();
-    PharmacyDate currentDate = new PharmacyDate();
+    
     String buffer = new String();
 
     public Pharmacy() {
@@ -67,26 +71,67 @@ public class Pharmacy {
             });
         });
 
-        return result.toString();
+        // for debuggins
+        if (Tp2.DEBUG)
+            result.append("Done STOCK\n");        
+
+
+        return result.append("\n").toString();
     }
 
     public String executePrescription(InputIterator iter) {
 
+        // create result string builder to store outputs
         StringBuilder result = new StringBuilder();
+        result.append("PRESCRIPTION\n");
 
+        // loop while presription has medications
         while (!iter.next().contains(";")) {
             buffer = iter.peek();
 
+            // create a Prescription item instance from the input line
             PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
 
-            // Check if there is enough left (including other backordered items)
-            // I.e., add to numRequested.
-            // and return a status message.
-            // Make expiry date calculation as well.
+            // get the required endDate for the dose cycles of the prescription item
+            PharmacyDate endDate = item.getEndDate();
+
+            // status message to report
+            String status = "COMMANDE";
+
+            // get stock tree for this medication
+            TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(item.medication);
+
+            // if medication does not exist in stock, we create it and add to stock
+            if (medicationStock == null){
+                medicationStock = new TreeMap<>();
+                stock.put(item.medication, medicationStock);
+            }
+
+            // for this medication stock we get inventory item for this expiry (end date)
+            InventoryItem inventoryItem = medicationStock.get(endDate);
+
+            // if medication with the required end date does not exist, create it and add to stock
+            if (inventoryItem == null){
+                inventoryItem = new InventoryItem(0, 0);
+                medicationStock.put(endDate, inventoryItem);
+            }
+
+            // updated numRequested
+            inventoryItem.numRequested += item.numTotal;
+
+            // if there is enough left then status = OK else leave status = COMMANCE
+            if ((inventoryItem.numAvailable - inventoryItem.numRequested) >= item.numTotal)
+                status = "OK";
+
+            // return a status message.
+            result.append(String.format("%s %d %d %s\n", item.medication, item.numPerDose, item.numRepeats, status));
         }
 
-        result.append("Done PRESCRIPTION\n");
-        return result.toString();
+        // for debuggins
+        if (Tp2.DEBUG)
+            result.append("Done PRESCRIPTION\n");
+
+        return result.append("\n").toString();
     }
 
     public String executeDate(InputIterator iter) {
@@ -94,23 +139,74 @@ public class Pharmacy {
         String[] parts = iter.peek().split(" +");
         setCurrentDate(Parser.parseDate(parts[1]));
 
-        // Inventory update:
-        // - List ordered drugs.
-        // - Delete ordered drugs from order list.
-        // - etc... see assignment.
-    
-        return buildDateMessage();
-    }
+        // flag for returning empty order list
+        boolean emptyOrderList = true;
 
-    private String buildDateMessage() {
-        // TODO
+        // building order list
         StringBuilder result = new StringBuilder();
-        result.append(String.format(
-                "%s OK\n",
-                currentDate));
+        result.append(
+            String.format(
+                "%s COMMANDE\n",
+                currentDate
+            )
+        );
 
-        return result.toString();
+        // iterate through medications
+        for (String medicationName : stock.keySet()) {
+
+            TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(medicationName);
+
+            // iteratate through all medication stock
+            for (PharmacyDate expiryDate : medicationStock.keySet()){
+
+                InventoryItem inventoryItem = medicationStock.get(expiryDate);
+
+                // if a medication has expeired, remove it
+                if (expiryDate.compareTo(currentDate) < 0){
+                    inventoryItem.numAvailable = 0;
+                }
+
+                // find ordered drugs
+                if (inventoryItem.numAvailable < inventoryItem.numRequested){
+
+                    // list ordered drugs
+                    result.append(
+                        String.format(
+                            "%s %d \n",
+                            medicationName,
+                            inventoryItem.numRequested - inventoryItem.numAvailable
+                        )
+                    );
+
+                    // remove drugs from odered list
+                    inventoryItem.numRequested = 0;
+
+                    // change flag
+                    emptyOrderList = false;
+                }
+
+            }
+
+        }
+
+        // if order list is empty, result is OK
+        if (emptyOrderList){
+            result.delete(0, result.length());
+            result.append(
+                String.format(
+                    "%s OK\n",
+                    currentDate
+                )
+            );
+        }
+
+        // for debuggins
+        if (Tp2.DEBUG)
+            result.append("Done DATE\n");
+
+        return result.append("\n").toString();
     }
+
 
     private void setCurrentDate(PharmacyDate val) {
         if (val.compareTo(MIN_DATE) < 0 || val.compareTo(MAX_DATE) > 0) {
