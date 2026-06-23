@@ -7,7 +7,7 @@ import java.util.List;
 public class Tp2 {
 
     // GLOBAL CONSTANT FOR DEBUGGING, ACCESSIBLE AND CHANGABLE FROM EVERYWHERE
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     public static void main(String [] args) throws IOException {
 

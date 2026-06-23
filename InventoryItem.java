@@ -1,9 +1,9 @@
 public class InventoryItem {
     int numAvailable;
-    int numRequested;
+    int numOrdered;
 
-    public InventoryItem(int numAvailable, int numRequested) {
+    public InventoryItem(int numAvailable) {
         this.numAvailable = numAvailable;
-        this.numRequested = numRequested;
+        this.numOrdered = 0;
     }
 }
