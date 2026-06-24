@@ -190,7 +190,14 @@ public class Pharmacy {
         boolean emptyOrderList = true;
 
         // building result output
+        // add commande by default
         StringBuilder result = new StringBuilder();
+        result.append(
+            String.format(
+                "%s COMMANDES :\n",
+                currentDate
+            )
+        );
 
         // iterate through all medications
         for (String medicationName : stock.keySet()) {
@@ -205,8 +212,9 @@ public class Pharmacy {
 
                 InventoryItem inventoryItem = medicationStock.get(expiryDate);
 
-                // if a medication has expired, remove it
+                // if a medication has expired, remove it but add items to order
                 if (expiryDate.compareTo(currentDate) < 0){
+                    totalNumOrdered += inventoryItem.numOrdered;
                     inventoryItem.numAvailable = 0;
                     inventoryItem.numOrdered = 0;
                 }
@@ -218,13 +226,13 @@ public class Pharmacy {
                 {
                     totalNumOrdered += inventoryItem.numOrdered;
                     inventoryItem.numOrdered = 0;
-                    emptyOrderList = false; //
                 }
             }
 
-            // if totalNumOrdered is not 0 then add to the result
+            // if totalNumOrdered is not 0 then change flag and add to the resul
             if (totalNumOrdered > 0) 
             {
+                emptyOrderList = false; // update flag
                 result.append(
                     String.format(
                         "%s %d\n",
@@ -245,15 +253,6 @@ public class Pharmacy {
                     currentDate
                 )
             );
-        }
-        // else we write COMMANDES: at the beggining
-        else{
-            result.insert(0, 
-            String.format(
-                "%s COMMANDES :\n",
-                currentDate
-            )
-        );
         }
 
         // for debuggins
