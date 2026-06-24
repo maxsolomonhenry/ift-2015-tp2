@@ -46,7 +46,13 @@ public class Tp2 {
                         state = State.END;
                         continue;
                     }
-                    state = Parser.parseCommand(iter.next());
+
+                    String line = iter.next().trim();
+                    if (line.equals(";") || line.isEmpty()) {
+                        continue;
+                    }
+
+                    state = Parser.parseCommand(line);
                     continue;
                 }
                 case APPROV -> result = pharmacy.executeApprov(iter);
