@@ -2,6 +2,15 @@
 
 Make a pharamcy stocking app.
 
+## Scripts
+
+1. script to compare expected outputs and outputs produced by TP2
+
+run in bush:
+./compare_outputs.sh
+
+
+
 ## Architecture
 
 ### Hierarchy
