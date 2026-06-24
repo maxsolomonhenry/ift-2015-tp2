@@ -71,7 +71,7 @@ public class Pharmacy {
             store.forEach((date, item) -> {
 
                 // Skip expired drugs or empty entries.
-                if (item.numAvailable != 0 && date.compareTo(currentDate) >= 0){
+                if (item.numAvailable != 0 && date.compareTo(currentDate) > 0){
                     result.append(String.format("%s %d %s\n", 
                         medication, item.numAvailable, date));
                 }
