@@ -48,10 +48,11 @@ Hierarchy is as follows:
 
 ## TODO
 - [ ] Double check that lines with ";" in them don't get ignored.
-- [ ] Is `InventoryItem.numRequested` used? If not get rid of it and simplify to an `Integer` type.
 - [ ] Comments and cleanup.
 - [ ] What is the deal with `NavigableMap`? I think this adds unnecessary complexity.
 - [ ] Report writeup (empirical analysis).
+- [ ] Redesignate the responsibility of the expiry date from prescription item to the Pharmacy engine.
+- [ ] Clean up empty inventory items.
 
 ### Max
 - [x] Logic to write output
