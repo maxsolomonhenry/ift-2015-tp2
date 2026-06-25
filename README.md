@@ -48,9 +48,10 @@ Hierarchy is as follows:
 
 ## TODO
 - [ ] Double check that lines with ";" in them don't get ignored.
-- [ ] DATE
-- [ ] PRESCRIPTION
-
+- [ ] Is `InventoryItem.numRequested` used? If not get rid of it and simplify to an `Integer` type.
+- [ ] Comments and cleanup.
+- [ ] What is the deal with `NavigableMap`? I think this adds unnecessary complexity.
+- [ ] Report writeup (empirical analysis).
 
 ### Max
 - [x] Logic to write output
@@ -60,6 +61,8 @@ Hierarchy is as follows:
 - [x] STOCK
 
 ### Vlad
+- [x] DATE
+- [x] PRESCRIPTION
 - [x] Date class with validity checking and order (preimplemented?)
     - `Date(year (int), month (int), day (int))`
     - `validate()` (called in the constructor): makes sure that the date is a real one (e.g., no Feb 29 _unless it's a leap year_).

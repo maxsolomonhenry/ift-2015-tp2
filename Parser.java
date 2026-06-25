@@ -17,7 +17,7 @@ public class Parser {
     public static ApprovItem parseApprovItem(String buffer) {
         String[] parts = buffer.trim().split("\\s+");
 
-        // Vars here named for clarity (n.b. less efficient).
+        // Vars assigned and named for clarity (this is slightly less efficient).
         String name = parts[0];
         int quantity = Integer.parseInt(parts[1]);
         PharmacyDate date = parseDate(parts[2]);
@@ -28,7 +28,7 @@ public class Parser {
     public static PrescriptionItem parsePrescriptionItem(String buffer) {
         String[] parts = buffer.trim().split("\\s+");
 
-        // Vars here named for clarity (n.b. less efficient).
+        // Vars assigned and named for clarity (this is slightly less efficient).
         String medication = parts[0];
         int numPerDose = Integer.parseInt(parts[1]);
         int numRepeats = Integer.parseInt(parts[2]);

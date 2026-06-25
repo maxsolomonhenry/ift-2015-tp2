@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Tp2 {
 
-    // GLOBAL CONSTANT FOR DEBUGGING, ACCESSIBLE AND CHANGABLE FROM EVERYWHERE
+    // Debugging flag.
     static final boolean DEBUG = false;
 
     public static void main(String [] args) throws IOException {
@@ -34,24 +34,41 @@ public class Tp2 {
             System.out.println("\nBEGIN OUTPUT");
         }
 
-        // For storing output.
+        // For storing latest (local) output.
         String result = "";
+
+        // For storing all outputs. `StringBuilder` can concatenate in O(1).
         StringBuilder results = new StringBuilder();
 
-        // State machine directs the engine.
+        // State machine directs the engine, and passes the `iter` object around
+        // to advance through the input.
         while (state != State.END) {
             switch (state) {
                 case ACCEPT_COMMAND -> {
+                    // If you've reached the end of the input, quit. 
+                    // 
+                    // This is the only way to end the loop. But all states end 
+                    // by pointing to ACCEPT_COMMAND (see below); so, so long as 
+                    // a given state returns control to this loop, the program 
+                    // will always exit when it reaches the end of the file.
                     if (!iter.hasNext()) {
                         state = State.END;
                         continue;
                     }
 
                     String line = iter.next().trim();
+
+                    // Skip lines that are empty or just a semicolon.
                     if (line.equals(";") || line.isEmpty()) {
                         continue;
                     }
 
+                    // If state is "ACCEPT_COMMAND," update the state and go 
+                    // back to the while loop (re-renter the case-switch).
+                    //
+                    // All other states pass through below the switch statement, 
+                    // which appends results and sets the state back to 
+                    // "ACCEPT_COMMAND".
                     state = Parser.parseCommand(line);
                     continue;
                 }
@@ -67,6 +84,8 @@ public class Tp2 {
                 System.out.print(result);
             }
 
+            // All commands get here, collect the result, and switch state back
+            // to "ACCEPT_COMMAND" to prepare for the next command.
             results.append(result);
             state = State.ACCEPT_COMMAND;
         }

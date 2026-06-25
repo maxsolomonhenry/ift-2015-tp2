@@ -1,9 +1,5 @@
 import java.util.TreeMap;
-
-import javax.print.DocFlavor.STRING;
-
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NavigableMap;
 
 public class Pharmacy {
@@ -11,13 +7,15 @@ public class Pharmacy {
     private static final PharmacyDate MIN_DATE = new PharmacyDate(2000, 1, 1);
     private static final PharmacyDate MAX_DATE = new PharmacyDate(2027, 1, 1);
     
-    // CREATE CLASS VARIABLE FOR CURRENT DATE TO ACCESS AND CHANGE GLOBALY
     static PharmacyDate currentDate = new PharmacyDate();
 
-    // create a variable to store information about the whole medication stock 
+    // Stock stores all the relevant information.
+    //
+    // Medications are keyed by their name (String). For each medication, we 
+    // store an expiry date and
     TreeMap<String, TreeMap<PharmacyDate, InventoryItem>> stock = new TreeMap<>();
  
-    // STATIC (GLOBAL) CLASS VARIABLE COUTING THE NUMBER OF PRESCCRIPTIONS
+    // STATIC (GLOBAL) CLASS VARIABLE COUNTING THE NUMBER OF PRESCCRIPTIONS
     static int prescriptionCount = 0; 
     
     String buffer = new String();
@@ -80,9 +78,9 @@ public class Pharmacy {
         });
 
         // for debuggins
-        if (Tp2.DEBUG)
-            result.append("Done STOCK\n");        
-
+        if (Tp2.DEBUG) {
+            System.out.println("Done STOCK\n");
+        }
 
         return result.append("\n").toString();
     }
@@ -173,9 +171,9 @@ public class Pharmacy {
             result.append(String.format("%s %d %d  %s\n", item.medication, item.numPerDose, item.numRepeats, status));
         }
 
-        // for debuggins
-        if (Tp2.DEBUG)
-            result.append("Done PRESCRIPTION\n");
+        if (Tp2.DEBUG) {
+            System.out.println("Done PRESCRIPTION\n");
+        }
 
         return result.append("\n").toString();
     }
@@ -256,8 +254,9 @@ public class Pharmacy {
         }
 
         // for debuggins
-        if (Tp2.DEBUG)
-            result.append("Done DATE\n");
+        if (Tp2.DEBUG) {
+            System.out.println("Done DATE\n");
+        }
 
         return result.append("\n").toString();
     }
