@@ -15,9 +15,4 @@ public class PrescriptionItem {
     public int getNeedNumber(){
         return this.numPerDose * this.numRepeats;
     }
-
-    // get (create) the needed date for the medications when dose cycles ends 
-    public PharmacyDate getNeedExpDate(){        
-        return Pharmacy.currentDate.plusDays(this.numPerDose * this.numRepeats);
-    }
 }

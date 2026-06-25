@@ -47,11 +47,11 @@ Hierarchy is as follows:
     - for FIFO handling of prescriptions.
 
 ## TODO
-- [ ] Double check that lines with ";" in them don't get ignored.
+- [x] Double check that lines with ";" in them don't get ignored.
 - [ ] Comments and cleanup.
-- [ ] What is the deal with `NavigableMap`? I think this adds unnecessary complexity.
+- [x] What is the deal with `NavigableMap`? I think this adds unnecessary complexity.
 - [ ] Report writeup (empirical analysis).
-- [ ] Redesignate the responsibility of the expiry date from prescription item to the Pharmacy engine.
+- [x] Redesignate the responsibility of the expiry date from prescription item to the Pharmacy engine.
 - [ ] Clean up empty inventory items.
 
 ### Max
