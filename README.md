@@ -13,39 +13,6 @@ run in bush:
 
 ## Architecture
 
-### Hierarchy
-Hierarchy is as follows:
-- `stockTree (TreeSet<MedicationItem>)`
-- `MedicationItem`:
-    - `name (String)`: Medication name (comparable)
-    - `inventory (PriorityQueue<InventoryItem>)`
-- `InventoryItem`:
-   - `expiryDate (Date)`: Date class (comparable)
-   - `quantity (Integer)`: amount available
-
-### Classes
-- `MedicationItem`
-    - name (String, comparable), inventory (MinHeap<InventoryItem>)
-    - compareTo on name
-    - getName to get name of the medication
-    - addrecord to add new InventoryItem instace to inventory heap
-- `InventoryItem`
-    - expiryDate (Date, comparable), quantity (Integer)
-    - compareTo on expiryDate
-    - setQuanity on quanity to overwrite quantity
-- `Date`
-    - validation logic (doesn't validate leap years, num days in certain months, etc.)
-    - comparable implementation
-- ?`Prescription` (for requests)
-    - unique id
-    - medications (List<MedicationRequest>)
-- ?`MedicationRequest`
-    - medication name
-    - dose per cycle
-    - num cycles
-- `ProcessingQueue` (Queue<Prescription>)
-    - for FIFO handling of prescriptions.
-
 ## TODO
 - [x] Double check that lines with ";" in them don't get ignored.
 - [x] Comments and cleanup.

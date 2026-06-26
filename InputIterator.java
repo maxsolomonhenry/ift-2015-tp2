@@ -19,7 +19,7 @@ public class InputIterator {
         return buffer;
     }
 
-    public String peek() {
+    public String current() {
         return buffer;
     }
 }

@@ -18,16 +18,13 @@ public class Pharmacy {
  
     // Presciption counter to label incoming prescriptions.
     private int prescriptionCount = 0; 
-    
-    // Working memory for the input.
-    String buffer = new String();
 
     public Pharmacy() {
     }
 
     public String executeApprov(InputIterator iter) {
         while (!iter.next().contains(";")) {
-            buffer = iter.peek();
+            String buffer = iter.current();
             ApprovItem item = Parser.parseApprovItem(buffer);
 
             // Check if this medication is there. If not, make an entry.
@@ -53,7 +50,7 @@ public class Pharmacy {
 
     public String executeStock(InputIterator iter) {
         // Advance iterator (';' may be on newline).
-        while (!iter.peek().contains(";")) {
+        while (!iter.current().contains(";")) {
             iter.next();
         }
 
@@ -101,7 +98,7 @@ public class Pharmacy {
 
         // Loop while presription has medications.
         while (!iter.next().contains(";")) {
-            buffer = iter.peek();
+            String buffer = iter.current();
 
             // Create a Prescription item instance from the input line.
             PrescriptionItem item = Parser.parsePrescriptionItem(buffer);
@@ -173,7 +170,7 @@ public class Pharmacy {
 
     public String executeDate(InputIterator iter) {
         // Strip "DATE" text from the command string and take the date data.
-        String[] parts = iter.peek().split(" +");
+        String[] parts = iter.current().split(" +");
         setCurrentDate(Parser.parseDate(parts[1]));
 
         boolean isOrderListEmpty = true;
