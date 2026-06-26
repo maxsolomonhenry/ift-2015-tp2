@@ -1,5 +1,6 @@
 import java.util.TreeMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NavigableMap;
 
 public class Pharmacy {
@@ -189,21 +190,27 @@ public class Pharmacy {
         // Iterate through all medications.
         for (String medicationName : stock.keySet()) {
 
-            TreeMap<PharmacyDate, InventoryItem> medicationStock = stock.get(medicationName);
+            TreeMap<PharmacyDate, InventoryItem> medicationSupply = stock.get(medicationName);
 
             // Track number needed for this medication.
             int totalNumOrdered = 0;
 
-            // Iteratate through all medication stock to update records.
-            for (PharmacyDate expiryDate : medicationStock.keySet()){
+            // Iteratate through all medication stock to update records. Defining
+            // an iterator (rather than for loop) to faciliate in-line deletion.
+            Iterator<Map.Entry<PharmacyDate, InventoryItem>> it = medicationSupply.entrySet().iterator();
+            while (it.hasNext()){
 
-                InventoryItem inventoryItem = medicationStock.get(expiryDate);
+                // Get next key and value pair.
+                Map.Entry<PharmacyDate, InventoryItem> entry = it.next();
+
+                PharmacyDate expiryDate = entry.getKey();
+                InventoryItem inventoryItem = entry.getValue();
 
                 // If a medication has expired, remove it but add items to order.
                 if (expiryDate.compareTo(currentDate) < 0){
                     totalNumOrdered += inventoryItem.numOrdered;
-                    inventoryItem.numAvailable = 0;
-                    inventoryItem.numOrdered = 0;
+                    it.remove();
+                    continue;
                 }
 
                 // If we need to order this inventory item add numOrdered to 
