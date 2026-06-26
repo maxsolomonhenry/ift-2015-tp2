@@ -123,25 +123,13 @@ public class Pharmacy {
                 stock.put(item.medication, medicationSupply);
             }
 
-            // Check if there is a supply at this exact date (may be null).
-            InventoryItem thisInventoryItem = medicationSupply.get(expNeed);
-
-            // If no supply with this date, create an entry and add to stock. We
-            // need this key to start the search for the next earliest expiry 
-            // date.
-            if (thisInventoryItem == null){
-                thisInventoryItem = new InventoryItem(0);
-                medicationSupply.put(expNeed, thisInventoryItem);
-            }
-
-            // Search from here to find the earliest possible supply. To do so
-            // we iterate through the sub-tree starting from this point.
+            // Search to find the earliest possible supply. To do so we iterate 
+            // through the sub-tree starting at the ideal expiry date.
             //
-            // Create a tail object, then make an iterator from this tail.
-            //
-            // Create a navigable tail tree. This subtree has elements with keys 
-            // bigger or equal to the desired expiry date. The bool true 
-            // indicates that we include the node with this key, if needed.
+            // Create a tail tree, then make an iterator from this tail. This 
+            // subtree has elements with keys bigger or equal to the desired 
+            // expiry date. The bool true indicates that we include the node 
+            // with the starting key, if present.
             NavigableMap<PharmacyDate, InventoryItem> medicationStockTail = 
                 medicationSupply.tailMap(expNeed, true);
 
@@ -152,24 +140,22 @@ public class Pharmacy {
             // supply to satisfy the prescription.
             while (iterator.hasNext() && numNeed>0)
             {
-                // get next inventory item
                 InventoryItem inventoryItem = iterator.next();
                 
-                // if it has more available than needed, then we satisfied the needed
+                // If it has more available than needed, then we're done.
                 if (inventoryItem.numAvailable >= numNeed)
                 {
                     inventoryItem.numAvailable -= numNeed;
                     numNeed = 0;
-                    status = "OK"; // put status is OK
+                    status = "OK";
                 }
             }
 
-            // If not found, order more of this item with the required 
-            // expiry date.
+            // If not found, create an entry and add to stock. This will
+            // register as an order request.
             if (numNeed > 0)
-            {
-                thisInventoryItem.numOrdered = numNeed -  thisInventoryItem.numAvailable;
-                thisInventoryItem.numAvailable = 0;
+            {   
+                medicationSupply.put(expNeed, new InventoryItem(0, numNeed));
             }
             
             // Return status message.
@@ -185,14 +171,13 @@ public class Pharmacy {
 
 
     public String executeDate(InputIterator iter) {
-        // Strip "DATE" text.
+        // Strip "DATE" text from the command string and take the date data.
         String[] parts = iter.peek().split(" +");
         setCurrentDate(Parser.parseDate(parts[1]));
 
         boolean isOrderListEmpty = true;
 
-        // building result output
-        // add commande by default
+        // To build the result of the output. Add COMMANDES by default.
         StringBuilder result = new StringBuilder();
         result.append(
             String.format(

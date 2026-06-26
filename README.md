@@ -48,7 +48,7 @@ Hierarchy is as follows:
 
 ## TODO
 - [x] Double check that lines with ";" in them don't get ignored.
-- [ ] Comments and cleanup.
+- [x] Comments and cleanup.
 - [x] What is the deal with `NavigableMap`? I think this adds unnecessary complexity.
 - [ ] Report writeup (empirical analysis).
 - [x] Redesignate the responsibility of the expiry date from prescription item to the Pharmacy engine.
