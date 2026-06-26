@@ -194,28 +194,21 @@ public class Pharmacy {
 
             // Iteratate through all medication stock to update records. Defining
             // an iterator (rather than for loop) to faciliate in-line deletion.
-            Iterator<Map.Entry<PharmacyDate, InventoryItem>> it = medicationSupply.entrySet().iterator();
-            while (it.hasNext()){
+            Iterator<Map.Entry<PharmacyDate, InventoryItem>> iterator = medicationSupply.entrySet().iterator();
+            while (iterator.hasNext()){
 
                 // Get next key and value pair.
-                Map.Entry<PharmacyDate, InventoryItem> entry = it.next();
+                Map.Entry<PharmacyDate, InventoryItem> entry = iterator.next();
 
                 PharmacyDate expiryDate = entry.getKey();
                 InventoryItem inventoryItem = entry.getValue();
 
-                // If a medication has expired, remove it but add items to order.
-                if (expiryDate.compareTo(currentDate) < 0){
+                // If we need to order this inventory item or it has expired.
+                // Then we add items to order and remove it.
+                if (inventoryItem.numOrdered > 0 || expiryDate.compareTo(currentDate) < 0){
                     totalNumOrdered += inventoryItem.numOrdered;
-                    it.remove();
+                    iterator.remove();
                     continue;
-                }
-
-                // If we need to order this inventory item add numOrdered to 
-                // totalNumOrdered. Reset numOrdered to 0.
-                if (inventoryItem.numOrdered > 0)
-                {
-                    totalNumOrdered += inventoryItem.numOrdered;
-                    inventoryItem.numOrdered = 0;
                 }
             }
 
