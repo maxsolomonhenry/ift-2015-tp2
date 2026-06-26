@@ -45,13 +45,8 @@ public class Tp2 {
         while (state != State.END) {
             switch (state) {
                 case ACCEPT_COMMAND -> {
-                    // If you've reached the end of the input, quit. 
-                    // 
-                    // This is the only way to end the loop. But all states end 
-                    // by pointing to ACCEPT_COMMAND (see below); so, so long as 
-                    // a given state returns control to this loop, the program 
-                    // will always exit when it reaches the end of the file.
                     if (!iter.hasNext()) {
+                        // If you've reached the end of the input, quit. 
                         state = State.END;
                         continue;
                     }
