@@ -184,30 +184,44 @@ public class Pharmacy {
             )
         );
 
-        // Iterate through all medications.
-        for (String medicationName : stock.keySet()) {
+        // We iterate through all medications and their inventory items.
 
-            TreeMap<PharmacyDate, InventoryItem> medicationSupply = stock.get(medicationName);
+        // Iterate through all medications of stock to update it.
+        // Create medicationIteratore (rather than for loop) to facilitate iteration and in-line deletion deletion.
+        Iterator<Map.Entry<String, TreeMap<PharmacyDate, InventoryItem>>> medicationIterator = 
+            stock.entrySet().iterator();
+        while (medicationIterator.hasNext())
+        {
+            // Get next key and value pair.
+            Map.Entry<String, TreeMap<PharmacyDate, InventoryItem>> medicationEntry = 
+                medicationIterator.next();
+
+            // name for this medication
+            String medicationName = medicationEntry.getKey();
+
+            // get medicationSupply for this medication
+            TreeMap<PharmacyDate, InventoryItem> medicationSupply = medicationEntry.getValue();
 
             // Track number needed for this medication.
             int totalNumOrdered = 0;
 
-            // Iteratate through all medication stock to update records. Defining
-            // an iterator (rather than for loop) to faciliate in-line deletion.
-            Iterator<Map.Entry<PharmacyDate, InventoryItem>> iterator = medicationSupply.entrySet().iterator();
-            while (iterator.hasNext()){
+            // Iteratate through all medicationSupply to update records.
+            // Create itemIterator (rather than for loop) to faciliate in-line deletion.
+            Iterator<Map.Entry<PharmacyDate, InventoryItem>> itemIterator = medicationSupply.entrySet().iterator();
+            while (itemIterator.hasNext()){
 
                 // Get next key and value pair.
-                Map.Entry<PharmacyDate, InventoryItem> entry = iterator.next();
+                Map.Entry<PharmacyDate, InventoryItem> inventoryEntry = itemIterator.next();
 
-                PharmacyDate expiryDate = entry.getKey();
-                InventoryItem inventoryItem = entry.getValue();
+                // get expiryDate and InventoryItem
+                PharmacyDate expiryDate = inventoryEntry.getKey();
+                InventoryItem inventoryItem = inventoryEntry.getValue();
 
                 // If we need to order this inventory item or it has expired.
                 // Then we add items to order and remove it.
                 if (inventoryItem.numOrdered > 0 || expiryDate.compareTo(currentDate) < 0){
                     totalNumOrdered += inventoryItem.numOrdered;
-                    iterator.remove();
+                    itemIterator.remove();
                     continue;
                 }
             }
@@ -226,6 +240,10 @@ public class Pharmacy {
                 );
             }
 
+            // if after updating records the medicationSupply is empty we remove it
+            if (medicationSupply.isEmpty()){
+                medicationIterator.remove();
+            }
         }
 
         // If order list is empty, result is "OK."
