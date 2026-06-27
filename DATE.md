@@ -1,4 +1,4 @@
-FUNCTIOn executeDate(stock, newDate) DO
+FUNCTION executeDate(stock, newDate) DO
 
     result <- create empty string builder for printing result
 

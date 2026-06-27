@@ -128,11 +128,11 @@ public class Pharmacy {
             // subtree has elements with keys bigger or equal to the desired 
             // expiry date. The bool true indicates that we include the node 
             // with the starting key, if present.
-            NavigableMap<PharmacyDate, InventoryItem> medicationStockTail = 
+            NavigableMap<PharmacyDate, InventoryItem> medicationSupplyTail = 
                 medicationSupply.tailMap(expNeed, true);
 
             Iterator<InventoryItem> iterator =
-                medicationStockTail.values().iterator();
+                medicationSupplyTail.values().iterator();
 
             // Iterate over each inventory item until (and if) we find enough 
             // supply to satisfy the prescription.
