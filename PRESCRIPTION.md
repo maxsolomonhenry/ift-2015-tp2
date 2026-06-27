@@ -34,6 +34,6 @@ FUNCTION executePrescription(stock, prescription, curDate) DO
             add (expNeed, inventoryItem) to medicationSupply
 
 
-    result <- add medication and its status (OK or COMMANDE)
+        result <- add medication and its status (OK or COMMANDE)
 
     RETURN result
