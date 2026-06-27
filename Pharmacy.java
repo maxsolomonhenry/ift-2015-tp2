@@ -157,7 +157,9 @@ public class Pharmacy {
             }
             
             // Return status message.
-            result.append(String.format("%s %d %d  %s\n", item.medication, item.numPerDose, item.numRepeats, status));
+            result.append(
+                String.format("%s %d %d  %s\n", item.medication, item.numPerDose, item.numRepeats, status)
+            );
         }
 
         if (Tp2.DEBUG) {
